@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>MLN122 • Học bài</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font: 12px Arial, sans-serif;
+            color: #111;
+            background: #eee;
+            overflow: hidden;
+        }
+
+        .top {
+            height: 38px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 2px 14px 1px 8px;
+            background: #f5f5f5;
+            border: 1px solid #d3d3d3;
+        }
+
+        .brand {
+            font: 18px Georgia, serif;
+            letter-spacing: -1px;
+            color: #222;
+            width: 94px;
+            flex: none;
+            font-weight: bold;
+        }
+
+        .tag {
+            font-size: 12px;
+            font-weight: bold;
+            color: #1c3475;
+            white-space: nowrap;
+        }
+
+        .progress {
+            height: 18px;
+            flex: 1;
+            border: 1px solid #c7c7c7;
+            background: #e9e9e9;
+            padding: 1px;
+        }
+
+        .bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #11a22b, #42e35d);
+            transition: width .2s;
+        }
+
+        .top select {
+            font: 11px Arial;
+            width: 175px;
+            height: 21px;
+            border: 1px solid #aaa;
+            background: white;
+            cursor: pointer;
+        }
+
+        .top .select {
+            display: block;
+            flex: none;
+            color: #222;
+            padding: 1px 4px;
+        }
+
+        .study-link {
+            flex: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 24px;
+            padding: 0 10px;
+            border: 1px solid #1c3475;
+            background: #fff;
+            color: #1c3475;
+            text-decoration: none;
+            font: bold 11px Arial, sans-serif;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .study-link:hover {
+            background: #eaf0ff;
+        }
+
+        .layout {
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            top: 38px;
+            bottom: 34px;
+            display: grid;
+            grid-template-columns: 33.5% 1fr;
+            padding: 0;
+            border: 1px solid #d2d2d2;
+            background: #eee;
+        }
+
+        .left {
+            background: white;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            border: 0;
+            border-right: 1px solid #d2d2d2;
+        }
+
+        .lefthead {
+            height: 27px;
+            padding: 3px 10px;
+            border-bottom: 1px solid #aaa;
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            justify-content: flex-start;
+            color: #183b7e;
+        }
+
+        .lefthead strong {
+            font-size: 12px;
+        }
+
+        .answers {
+            padding: 6px 8px;
+            overflow: auto;
+            flex: 1;
+        }
+
+        .hint {
+            margin: 0 0 8px;
+            color: #444;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .search-box {
+            width: 100%;
+            height: 24px;
+            border: 1px solid #ccc;
+            padding: 2px 6px;
+            font-size: 11px;
+            margin-bottom: 8px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 4px;
+            padding: 3px 4px;
+            border-top: 1px solid #eee;
+            height: 26px;
+            align-items: center;
+        }
+
+        .nav button {
+            padding: 1px 6px;
+            font-size: 11px;
+            border: 1px solid #bbb;
+            border-radius: 0;
+            background: #eee;
+            color: #111;
+            height: 20px;
+        }
+
+        .question-nav {
+            display: grid;
+            grid-template-columns: repeat(10, minmax(20px, 1fr));
+            align-content: start;
+            gap: 3px;
+            padding: 4px 5px 6px;
+            border-top: 1px solid #ddd;
+            max-height: 115px;
+            overflow-y: auto;
+            background: #fff;
+        }
+
+        .question-nav button {
+            height: 21px;
+            padding: 0;
+            font-size: 10px;
+            background: #f5f5f5;
+            border: 1px solid #bbb;
+            cursor: pointer;
+        }
+
+        .question-nav button.current {
+            outline: 2px solid #3159a7;
+            outline-offset: -2px;
+            font-weight: bold;
+            background: #eaf0ff;
+        }
+
+        .question-nav button.done {
+            background: #d9f4e8;
+            border-color: #79c89e;
+        }
+
+        button {
+            font: 11px Arial;
+            cursor: pointer;
+            border: 1px solid #aaa;
+            border-radius: 0;
+            padding: 2px 8px;
+            background: #eee;
+            color: #111;
+        }
+
+        button:hover {
+            background: #e5e5e5;
+        }
+
+        button.primary {
+            background: #eee;
+            color: #111;
+            border-color: #aaa;
+            font-weight: bold;
+        }
+
+        button:disabled {
+            opacity: .4;
+            cursor: default;
+        }
+
+        .right {
+            position: relative;
+            margin: 0;
+            background: #efefef;
+            border: 0;
+            border-left: 5px solid #1c3475;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .qhead {
+            height: 0;
+            overflow: hidden;
+            padding: 0;
+            border: 0;
+        }
+
+        .qcount {
+            display: none;
+        }
+
+        .qbody {
+            padding: 0;
+            overflow: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            padding-bottom: 30px;
+        }
+
+        .card {
+            width: min(85%, 850px);
+            max-width: none;
+            min-height: 220px;
+            background: white;
+            border: 1px solid #d4d4d4;
+            border-radius: 0;
+            padding: 14px 18px;
+            box-shadow: none;
+        }
+
+        .qmeta {
+            font-size: 11px;
+            color: #1c3475;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .qtext {
+            font-size: 13px;
+            line-height: 19px;
+            white-space: pre-line;
+            margin: 0 0 14px;
+            color: #111;
+            font-weight: 500;
+        }
+
+        .study-choice {
+            font: 12px Arial;
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            padding: 5px 8px;
+            margin-bottom: 5px;
+            border-radius: 2px;
+            background: #fafafa;
+            border: 1px solid #e5e5e5;
+        }
+
+        .study-choice.correct {
+            background: #e1f6e8;
+            color: #12652d;
+            font-weight: bold;
+            border-color: #a3e0b2;
+        }
+
+        .study-key {
+            font-weight: bold;
+            flex: none;
+            width: 20px;
+        }
+
+        .study-feedback {
+            margin-top: 14px;
+            padding: 8px 10px;
+            background: #e5f8e9;
+            border: 1px solid #a3e0b2;
+            color: #08742d;
+            font-size: 12px;
+            line-height: 1.5;
+            white-space: pre-line;
+            font-weight: 500;
+        }
+
+        .extra-note-box {
+            margin-top: 10px;
+            padding: 8px 10px;
+            background: #f9fbfd;
+            border-left: 3px solid #1c3475;
+            font-size: 11px;
+            color: #333;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        .bigarrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 14px;
+            color: #b0b0b0;
+            font-size: 38px;
+            font-family: Arial;
+            cursor: pointer;
+            user-select: none;
+            line-height: 1;
+            padding: 4px 8px;
+        }
+
+        .bigarrow:hover {
+            color: #3159a7;
+        }
+
+        .bigarrow.nextarrow {
+            left: auto;
+            right: 14px;
+        }
+
+        @media(max-width: 680px) {
+            html,
+            body {
+                height: auto;
+                min-height: 100%;
+                overflow: auto;
+            }
+
+            .top {
+                height: auto;
+                min-height: 50px;
+                position: sticky;
+                top: 0;
+                z-index: 4;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+                padding: 6px 8px;
+            }
+
+            .layout {
+                position: static;
+                display: flex;
+                flex-direction: column;
+                margin: 0;
+                border: 0;
+            }
+
+            .card {
+                width: 95%;
+            }
+
+            .bigarrow {
+                display: none;
+            }
+
+            .question-nav {
+                max-height: 160px;
+                grid-template-columns: repeat(6, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="top">
+        <div class="brand">MLN122</div>
+        <div class="tag" id="tagline">Học bài • xem đáp án và giải thích từng câu</div>
+        <select id="exam" class="select" aria-label="Chọn bộ đề" title="Chọn bộ đề"></select>
+        <div class="progress">
+            <div id="bar" class="bar"></div>
+        </div>
+        <a class="study-link" href="index.html" title="Chuyển sang chế độ luyện thi làm bài">Luyện thi</a>
+        <span id="proglabel" style="display:none">0%</span>
+    </header>
+
+    <main class="layout">
+        <section class="left">
+            <div class="lefthead">
+                <strong>Danh sách câu hỏi</strong>
+            </div>
+            <div class="answers">
+                <p class="hint">Chọn số câu bên dưới để chuyển nhanh. Đáp án đúng được tô màu xanh nổi bật.</p>
+                <input type="text" id="filterInput" class="search-box" placeholder="Tìm kiếm từ khóa câu hỏi...">
+            </div>
+            <div class="nav">
+                <button id="prev">Câu trước</button>
+                <button id="next" class="primary">Câu tiếp</button>
+            </div>
+            <div id="questionNav" class="question-nav" aria-label="Đi tới câu hỏi"></div>
+        </section>
+
+        <section class="right">
+            <div class="qhead">
+                <span class="qcount" id="qcount"></span>
+                <div class="keygrid" id="keys"></div>
+            </div>
+            <div class="qbody">
+                <article class="card">
+                    <div class="qmeta" id="qmeta">Câu 1 / 60</div>
+                    <p class="qtext" id="question"></p>
+                    <div id="options"></div>
+                    <div id="studyFeedback" class="study-feedback"></div>
+                    <div id="extraNoteContainer"></div>
+                </article>
+            </div>
+            <div class="bigarrow" id="leftArrow" title="Câu trước">‹</div>
+            <div class="bigarrow nextarrow" id="rightArrow" title="Câu tiếp">›</div>
+        </section>
+    </main>
+
+    <script src="questions.js"></script>
+    <script>
+        const $ = s => document.querySelector(s);
+        const exam = $('#exam');
+        let setIndex = 0;
+        let index = 0;
+        let seenBySet = sets.map(() => new Set());
+
+        sets.forEach((set, i) => {
+            const o = document.createElement('option');
+            o.value = i;
+            o.textContent = set.title + ' (' + set.questions.length + ' câu)';
+            exam.append(o);
+        });
+
+        function answerKeys(q) {
+            return String(q.answer).match(/[A-E]/g) || [];
+        }
+
+        function render() {
+            const set = sets[setIndex];
+            const qs = set.questions;
+            const q = qs[index];
+            const keys = answerKeys(q);
+            const correctOptions = keys.map(k => q.options.find(o => o.key === k)).filter(Boolean);
+
+            $('#qcount').textContent = `Câu ${index + 1} / ${qs.length}`;
+            $('#qmeta').textContent = `Câu ${index + 1} / ${qs.length}` + (q.globalNumber ? ` (Gốc: Câu ${q.globalNumber})` : '');
+            $('#question').textContent = q.text;
+
+            $('#options').innerHTML = '';
+            q.options.forEach(o => {
+                const row = document.createElement('div');
+                const isCorrect = keys.includes(o.key);
+                row.className = 'study-choice' + (isCorrect ? ' correct' : '');
+
+                const mark = document.createElement('span');
+                mark.className = 'study-key';
+                mark.textContent = o.key + (isCorrect ? ' ✓' : '');
+
+                const text = document.createElement('span');
+                text.textContent = o.text;
+
+                row.append(mark, text);
+                $('#options').append(row);
+            });
+
+            const answerSummary = correctOptions.map(o => o.key + '. ' + o.text).join(' | ');
+            $('#studyFeedback').textContent = `Đáp án đúng: ${keys.join(', ')}\nNội dung: ${answerSummary}`;
+
+            // Notes / alternative questions
+            const noteBox = $('#extraNoteContainer');
+            noteBox.innerHTML = '';
+            let noteContent = '';
+            if (q.note) {
+                noteContent += `• Giải thích/Công thức: ${q.note}\n`;
+            }
+            if (q.extra_note) {
+                noteContent += `• ${q.extra_note}\n`;
+            }
+            if (noteContent.trim()) {
+                const box = document.createElement('div');
+                box.className = 'extra-note-box';
+                box.innerHTML = `<strong>Ghi chú / Kiểu hỏi khác:</strong><br>${noteContent.trim()}`;
+                noteBox.append(box);
+            }
+
+            $('#prev').disabled = index === 0;
+            $('#next').disabled = index === qs.length - 1;
+
+            seenBySet[setIndex].add(index);
+
+            // Render navigation buttons
+            $('#questionNav').innerHTML = '';
+            qs.forEach((question, i) => {
+                const button = document.createElement('button');
+                button.textContent = i + 1;
+                button.className = (i === index ? 'current ' : '') + (seenBySet[setIndex].has(i) ? 'done' : '');
+                button.title = 'Câu ' + (i + 1);
+                button.onclick = () => {
+                    index = i;
+                    render();
+                };
+                $('#questionNav').append(button);
+            });
+
+            $('#bar').style.width = ((seenBySet[setIndex].size) / qs.length * 100) + '%';
+            $('#tagline').textContent = `${set.title} • Đã xem ${seenBySet[setIndex].size}/${qs.length} câu`;
+        }
+
+        function move(step) {
+            index = Math.max(0, Math.min(sets[setIndex].questions.length - 1, index + step));
+            render();
+        }
+
+        exam.onchange = () => {
+            setIndex = Number(exam.value);
+            index = 0;
+            render();
+        };
+
+        $('#prev').onclick = () => move(-1);
+        $('#next').onclick = () => move(1);
+        $('#leftArrow').onclick = () => move(-1);
+        $('#rightArrow').onclick = () => move(1);
+
+        // Filter / search
+        $('#filterInput').oninput = e => {
+            const val = e.target.value.toLowerCase().trim();
+            if (!val) return;
+            const qs = sets[setIndex].questions;
+            const foundIdx = qs.findIndex(q => q.text.toLowerCase().includes(val) || q.options.some(o => o.text.toLowerCase().includes(val)));
+            if (foundIdx !== -1) {
+                index = foundIdx;
+                render();
+            }
+        };
+
+        document.addEventListener('keydown', e => {
+            if (['INPUT', 'SELECT', 'TEXTAREA'].includes(document.activeElement?.tagName)) return;
+            if (e.key === 'ArrowLeft') move(-1);
+            if (e.key === 'ArrowRight') move(1);
+        });
+
+        render();
+    </script>
+</body>
+
+</html>
+
